@@ -107,8 +107,11 @@ Available options:
 - `--footer`, `-f`: Commit footer (optional)
 - `--review`, `-r`: Review commit before pushing
 - `--push`, `-p`: Push commit to remote repository
+- `--suggestions`: Generate commit suggestions based on staged files
 
-## Example
+## Examples
+
+### Interactive Mode
 
 ```
 $ convcommit
@@ -124,6 +127,32 @@ feat(login): add login API integration
 
 closes #12
 ```
+
+### Smart Suggestions Mode
+
+```
+$ convcommit --suggestions
+
+🔍 Detected changes:
+- internal/auth/login.go
+
+💡 Suggested type: feat
+💡 Suggested scope: auth
+💡 Suggested title: add auth feature
+Use these suggestions? [Y/n]: Y
+Does this commit introduce a breaking change? [y/N]: N
+
+✅ Commit Created:
+feat(auth): add auth feature
+```
+
+The `--suggestions` flag analyzes your staged files and suggests appropriate commit elements based on file paths and types. It will:
+
+1. Check for staged files (or prompt you to stage changes if none are staged)
+2. Analyze file paths to suggest appropriate type, scope, and title
+3. Allow you to accept the suggestions or fall back to regular prompts
+
+This is especially useful for quickly creating conventional commits without having to manually specify each element.
 
 After your 5th commit, you'll be prompted for feedback:
 
