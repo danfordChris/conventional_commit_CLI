@@ -1,0 +1,127 @@
+# Convcommit
+
+A CLI tool that simplifies the process of making conventional commits.
+
+## What are Conventional Commits?
+
+Conventional Commits is a specification for adding human and machine-readable meaning to commit messages. It provides an easy set of rules for creating an explicit commit history, which makes it easier to write automated tools on top of.
+
+The commit message should be structured as follows:
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+## Features
+
+- 🚀 Interactive commit generation with structured prompts
+- 🌍 Global accessibility from any Git repository
+- 🔄 One-line installer script
+- 🎨 Color-coded prompts for better UX
+- 📊 Feedback mechanism after 5 successful commits
+
+## Installation
+
+### One-line Installer
+
+```bash
+curl -sSL https://raw.githubusercontent.com/user/convcommit/main/installer.sh | bash
+```
+
+This script will:
+- Download and install the binary globally
+- Handle any dependencies
+- Add it to your PATH (if needed)
+
+### Manual Installation
+
+If you prefer to install manually:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/user/convcommit.git
+   ```
+
+2. Build the binary:
+   ```bash
+   cd convcommit/cmd/conventional-commit
+   go build -o convcommit
+   ```
+
+3. Move the binary to a directory in your PATH:
+   ```bash
+   sudo mv convcommit /usr/local/bin/
+   ```
+
+## Usage
+
+### Interactive Mode
+
+Simply run the command without any arguments to enter interactive mode:
+
+```bash
+convcommit
+```
+
+You'll be prompted for:
+1. Type (e.g., feat, fix, chore, etc.)
+2. Scope (optional)
+3. Title (mandatory, short line)
+4. Description (optional, multiline)
+5. Body (optional, multiline)
+6. Footer (optional)
+
+### Command-line Arguments
+
+You can also use command-line arguments:
+
+```bash
+convcommit --type=feat --scope=ui --title="add login button" --push
+```
+
+Available options:
+- `--type`, `-t`: Commit type (required)
+- `--scope`, `-s`: Commit scope (optional)
+- `--title`, `-d`: Commit title (required)
+- `--body`, `-b`: Commit body (optional)
+- `--breaking`, `-!`: Indicates a breaking change
+- `--footer`, `-f`: Commit footer (optional)
+- `--review`, `-r`: Review commit before pushing
+- `--push`, `-p`: Push commit to remote repository
+
+## Example
+
+```
+$ convcommit
+Select commit type: feat
+Enter scope (optional): login
+Enter short title: add login API integration
+Enter description (optional): 
+Enter body (optional): 
+Enter footer (optional): closes #12
+
+✅ Commit Created:
+feat(login): add login API integration
+
+closes #12
+```
+
+After your 5th commit, you'll be prompted for feedback:
+
+```
+How satisfied are you with this tool (1-5)? 4
+Any suggestions? Add emoji support
+✅ Feedback sent to jurvisdanford329@gmail.com
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
