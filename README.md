@@ -72,7 +72,7 @@ Before committing, you need to have changes staged in your Git repository. You c
    git add .        # Stage all changes
    ```
 
-2. Let convcommit prompt you to stage all changes automatically if no changes are staged when you run the command.
+2. Let convcommit prompt you to stage all changes automatically if no changes are staged when you run the command. The tool will provide helpful error messages if specific files can't be staged (e.g., if they don't exist or are ignored by .gitignore).
 
 ### Interactive Mode
 
@@ -140,7 +140,6 @@ $ convcommit --suggestions
 💡 Suggested scope: auth
 💡 Suggested title: add auth feature
 Use these suggestions? [Y/n]: Y
-Does this commit introduce a breaking change? [y/N]: N
 
 ✅ Commit Created:
 feat(auth): add auth feature
@@ -169,3 +168,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+       ___🎉 Happy Coding!
