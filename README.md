@@ -62,6 +62,18 @@ If you prefer to install manually:
 
 ## Usage
 
+### Staging Changes
+
+Before committing, you need to have changes staged in your Git repository. You can either:
+
+1. Stage changes manually using Git commands:
+   ```bash
+   git add <files>  # Stage specific files
+   git add .        # Stage all changes
+   ```
+
+2. Let convcommit prompt you to stage all changes automatically if no changes are staged when you run the command.
+
 ### Interactive Mode
 
 Simply run the command without any arguments to enter interactive mode:

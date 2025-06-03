@@ -319,6 +319,33 @@ func CommitChanges(commitMessage string) error {
 	}
 	tmpFile.Close()
 
+	// Check if there are any staged changes
+	statusCmd := exec.Command("git", "diff", "--cached", "--name-only")
+	stagedOutput, err := statusCmd.Output()
+	if err != nil {
+		return fmt.Errorf("failed to check git status: %w", err)
+	}
+
+	// If there are no staged changes, ask if the user wants to stage all changes
+	if len(strings.TrimSpace(string(stagedOutput))) == 0 {
+		reader := bufio.NewReader(os.Stdin)
+		color.Yellow("No changes are staged for commit. Do you want to stage all changes? (y/N): ")
+		stageInput, _ := reader.ReadString('\n')
+		stageAll := strings.ToLower(strings.TrimSpace(stageInput)) == "y"
+
+		if stageAll {
+			// Stage all changes
+			addCmd := exec.Command("git", "add", ".")
+			addOutput, err := addCmd.CombinedOutput()
+			if err != nil {
+				return fmt.Errorf("failed to stage changes: %s", string(addOutput))
+			}
+			color.Green("All changes have been staged.")
+		} else {
+			return fmt.Errorf("no changes staged for commit. Use 'git add' to stage changes before committing")
+		}
+	}
+
 	// Commit the changes
 	cmd := exec.Command("git", "commit", "-m", commitMessage)
 	output, err := cmd.CombinedOutput()
