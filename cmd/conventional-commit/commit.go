@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"net/smtp"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -88,22 +87,22 @@ func CheckFeedbackNeeded() {
 // promptForFeedback prompts the user for feedback and sends it via email
 func promptForFeedback() {
 	reader := bufio.NewReader(os.Stdin)
-	
+
 	color.Yellow("\nYou've made 5 commits with convcommit! We'd love your feedback:")
-	
+
 	// Ask for satisfaction rating
 	fmt.Print(color.YellowString("How satisfied are you with this tool (1-5)? "))
 	ratingInput, _ := reader.ReadString('\n')
 	rating := strings.TrimSpace(ratingInput)
-	
+
 	// Ask for suggestions
 	fmt.Print(color.YellowString("Any suggestions for improvement? "))
 	suggestions, _ := reader.ReadString('\n')
 	suggestions = strings.TrimSpace(suggestions)
-	
+
 	// Send feedback via email
 	sendFeedbackEmail(rating, suggestions)
-	
+
 	color.Green("✅ Feedback sent to jurvisdanford329@gmail.com")
 }
 
@@ -113,7 +112,7 @@ func sendFeedbackEmail(rating, suggestions string) {
 	// In a real implementation, you would use an SMTP package or email API
 	// For now, we'll just print the feedback to the console
 	fmt.Printf("Would send email with rating: %s, suggestions: %s\n", rating, suggestions)
-	
+
 	// Example of how to send an email using SMTP
 	// You would need to replace these with actual credentials
 	/*
@@ -122,9 +121,9 @@ func sendFeedbackEmail(rating, suggestions string) {
 	to := []string{"jurvisdanford329@gmail.com"}
 	smtpHost := "smtp.example.com"
 	smtpPort := "587"
-	
+
 	message := []byte(fmt.Sprintf("Subject: Convcommit Feedback\r\n\r\nRating: %s\r\nSuggestions: %s", rating, suggestions))
-	
+
 	auth := smtp.PlainAuth("", from, password, smtpHost)
 	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, to, message)
 	if err != nil {
@@ -139,28 +138,28 @@ func IsGitRepository() bool {
 	if err == nil {
 		return true
 	}
-	
+
 	cmd := exec.Command("git", "rev-parse", "--is-inside-work-tree")
 	output, err := cmd.Output()
 	if err != nil {
 		return false
 	}
-	
+
 	return strings.TrimSpace(string(output)) == "true"
 }
 
 // PromptForCommit prompts the user for commit details
 func PromptForCommit() CommitMessage {
 	reader := bufio.NewReader(os.Stdin)
-	
+
 	// Get commit type
 	commitType := promptForType(reader)
-	
+
 	// Get commit scope (optional)
 	color.Cyan("Enter scope (optional, press Enter to skip): ")
 	scope, _ := reader.ReadString('\n')
 	scope = strings.TrimSpace(scope)
-	
+
 	// Get commit description
 	description := ""
 	for description == "" {
@@ -171,11 +170,11 @@ func PromptForCommit() CommitMessage {
 			color.Red("Title is required. Please try again.")
 		}
 	}
-	
+
 	// Get commit body (optional)
 	color.Cyan("Enter description (optional, press Enter to skip, multiple lines allowed, end with an empty line):")
 	body := readMultilineInput(reader)
-	
+
 	// Get commit body (optional)
 	color.Cyan("Enter body (optional, press Enter to skip, multiple lines allowed, end with an empty line):")
 	body2 := readMultilineInput(reader)
@@ -186,16 +185,16 @@ func PromptForCommit() CommitMessage {
 			body = body2
 		}
 	}
-	
+
 	// Check for breaking changes
 	color.Cyan("Is this a breaking change? (y/N): ")
 	breakingInput, _ := reader.ReadString('\n')
 	breaking := strings.ToLower(strings.TrimSpace(breakingInput)) == "y"
-	
+
 	// Get footer (optional)
 	color.Cyan("Enter footer (optional, press Enter to skip, multiple lines allowed, end with an empty line):")
 	footer := readMultilineInput(reader)
-	
+
 	// Create and return the commit message
 	return CommitMessage{
 		Type:        commitType,
@@ -215,10 +214,10 @@ func promptForType(reader *bufio.Reader) string {
 			fmt.Printf("%2d. %s\n", i+1, t)
 		}
 		color.Cyan("Enter number or type directly: ")
-		
+
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
-		
+
 		// Check if input is a number
 		var index int
 		if _, err := fmt.Sscanf(input, "%d", &index); err == nil {
@@ -263,29 +262,29 @@ func readMultilineInput(reader *bufio.Reader) string {
 // GenerateCommitMessage generates a conventional commit message
 func GenerateCommitMessage(commit CommitMessage) string {
 	var sb strings.Builder
-	
+
 	// Header: <type>[(scope)][!]: <description>
 	sb.WriteString(commit.Type)
-	
+
 	if commit.Scope != "" {
 		sb.WriteString("(")
 		sb.WriteString(commit.Scope)
 		sb.WriteString(")")
 	}
-	
+
 	if commit.Breaking {
 		sb.WriteString("!")
 	}
-	
+
 	sb.WriteString(": ")
 	sb.WriteString(commit.Description)
-	
+
 	// Body (optional)
 	if commit.Body != "" {
 		sb.WriteString("\n\n")
 		sb.WriteString(commit.Body)
 	}
-	
+
 	// Breaking change footer (if not already indicated in the header)
 	footer := commit.Footer
 	if commit.Breaking && (footer == "" || !strings.Contains(footer, "BREAKING CHANGE")) {
@@ -295,13 +294,13 @@ func GenerateCommitMessage(commit CommitMessage) string {
 			footer = "BREAKING CHANGE: This commit introduces breaking changes.\n" + footer
 		}
 	}
-	
+
 	// Footer (optional)
 	if footer != "" {
 		sb.WriteString("\n\n")
 		sb.WriteString(footer)
 	}
-	
+
 	return sb.String()
 }
 
@@ -313,27 +312,27 @@ func CommitChanges(commitMessage string) error {
 		return fmt.Errorf("failed to create temporary file for commit message: %w", err)
 	}
 	defer os.Remove(tmpFile.Name())
-	
+
 	// Write the commit message to the temporary file
 	if _, err := tmpFile.WriteString(commitMessage); err != nil {
 		return fmt.Errorf("failed to write commit message to temporary file: %w", err)
 	}
 	tmpFile.Close()
-	
+
 	// Commit the changes
 	cmd := exec.Command("git", "commit", "-m", commitMessage)
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		return fmt.Errorf("failed to commit changes: %s", string(output))
 	}
-	
+
 	// Increment commit count
 	if err := IncrementCommitCount(); err != nil {
 		fmt.Println("Warning: Failed to update commit count:", err)
 	}
-	
+
 	// Check if feedback is needed
 	CheckFeedbackNeeded()
-	
+
 	return nil
 }

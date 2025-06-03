@@ -54,7 +54,7 @@ if ! command -v go &> /dev/null; then
 
     # Download the latest release
     echo "Downloading convcommit..."
-    GITHUB_REPO="user/convcommit"
+    GITHUB_REPO="danfordChris/conventional_commit_CLI"
     DOWNLOAD_URL="https://github.com/${GITHUB_REPO}/releases/latest/download/convcommit_${OS}_${ARCH}.tar.gz"
 
     if ! curl -sL "$DOWNLOAD_URL" -o convcommit.tar.gz; then
@@ -83,7 +83,7 @@ else
 
     # Clone the repository
     echo "Cloning the repository..."
-    GITHUB_REPO="user/convcommit"
+    GITHUB_REPO="danfordChris/conventional_commit_CLI"
     git clone "https://github.com/${GITHUB_REPO}.git" .
 
     # Build the binary

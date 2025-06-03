@@ -29,7 +29,7 @@ The commit message should be structured as follows:
 ### One-line Installer
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/user/convcommit/main/installer.sh | bash
+curl -sSL https://raw.githubusercontent.com/danfordChris/conventional_commit_CLI/main/installer.sh | bash
 ```
 
 This script will:
@@ -43,14 +43,17 @@ If you prefer to install manually:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/user/convcommit.git
+   git clone https://github.com/danfordChris/conventional_commit_CLI.git convcommit
    ```
 
 2. Build the binary:
    ```bash
-   cd convcommit/cmd/conventional-commit
+   cd convcommit/cmd/convcommit
+   go mod tidy  # Ensure all dependencies are downloaded
    go build -o convcommit
    ```
+
+   Note: You must build from the cmd/convcommit directory, not from the repository root.
 
 3. Move the binary to a directory in your PATH:
    ```bash
